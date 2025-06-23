@@ -28,7 +28,7 @@ int main(){
     //Le cada indice dos vertices
     for(int j=0; j<3; j++){
       cin>>ind;
-      t.indVertices.push_back(ind);
+      t.vertices.push_back(pontos[ind-1]);
     }
     Triangulos.push_back(t);    
   }
@@ -40,6 +40,8 @@ int main(){
     cin>>s.ini.x>>s.ini.y>>s.ini.z>>s.fim.x>>s.fim.y>>s.fim.z;
     Segmentos.push_back(s);
   }
+
+  auto raiz = criaBSP<double>(Triangulos);
 
   #ifdef DEBUG
   //Impressao das estruturas lidas
@@ -60,7 +62,9 @@ int main(){
     cout<<s.ini<<" -> "<<s.fim<<"\n";
   }
   
+  printBSP(raiz);
   #endif
 
+  delete(raiz);
   return 0;
 }
