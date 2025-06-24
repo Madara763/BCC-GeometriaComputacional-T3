@@ -53,7 +53,7 @@ int main(){
   int aux{1};
   cout<<"Triangulos:\n";
   for(triangulo<t_ponto> t: Triangulos){
-    cout<<aux<<": "<<t.indVertices[0]<<", "<<t.indVertices[1]<<", "<<t.indVertices[2]<<"\n";
+    cout<<aux<<": "<<t.vertices[0]<<", "<<t.vertices[1]<<", "<<t.vertices[2]<<"\n";
     aux++;
   }
 

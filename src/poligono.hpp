@@ -53,10 +53,6 @@ template <typename T> struct triangulo{
 
   // Retorna dois vetores formados entre os três pontos do triângulo
   std::pair<ponto<T>, ponto<T>> getVetores() const {
-    if (vertices.size() != 3) {
-      throw std::runtime_error("Triângulo deve ter exatamente 3 vértices.");
-    }
-
     const ponto<T>& p1 = vertices[0];
     const ponto<T>& p2 = vertices[1];
     const ponto<T>& p3 = vertices[2];
@@ -106,8 +102,8 @@ template <typename T> struct hiperplano {
 
 		if((val_ini > EPS && val_fim > EPS) || (val_ini < -EPS && val_fim < -EPS)) {
 			return val_ini > 0 ? LadoPlano::Positivo : LadoPlano::Negativo;
-			return LadoPlano::Intersecta;
 		}
+    return LadoPlano::Intersecta;
 	}
 
 	// Avalia o lado do triangulo em relação ao hiperplano
@@ -239,20 +235,28 @@ BSPNode<T>* criaBSP(const std::vector<triangulo<T>>& s) {
   std::vector<triangulo<T>> sPlus, sMinus, sPlane;
 
   auto it = s.begin();
-  for (; it != s.end(); it++) {
-    auto t = *it;
-    if(it == s.begin()) continue;
-    auto lado = plano.ladoTriangulo(t);
-    if (lado == LadoPlano::Positivo)
-      sPlus.push_back(t);
-    else if (lado == LadoPlano::Negativo)
-      sMinus.push_back(t);
-    else if (lado == LadoPlano::Intersecta)
-      sPlane.push_back(t);
-    else if (lado == LadoPlano::NoPlano) {
-      sPlus.push_back(t);
-      sMinus.push_back(t);
-    }
+  for(; it != s.end(); it++) {
+	  auto t = *it;
+	  if(it == s.begin()) continue;
+	  auto lado = plano.ladoTriangulo(t);
+
+	  switch(lado) {
+	  case LadoPlano::Positivo:
+		  sPlus.push_back(t);
+		  break;
+	  case LadoPlano::Negativo:
+		  sMinus.push_back(t);
+		  break;
+	  case LadoPlano::Intersecta:
+		  sPlus.push_back(t);
+		  sMinus.push_back(t);
+		  break;
+	  case LadoPlano::NoPlano:
+		  sPlane.push_back(t);
+		  break;
+	  default:
+		  break;
+	  }
   }
 
   BSPNode<T>* esquerda = criaBSP(sMinus);
